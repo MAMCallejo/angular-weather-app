@@ -1,0 +1,3 @@
+.search-input:focus + .search-icon img {
+    opacity: 1;
+}

@@ -1,4 +1,4 @@
-export interface WeatherSearchLocationCountryModel {
+export interface CountryModel {
     name: string;
     code: string;
     iconFileName: string;

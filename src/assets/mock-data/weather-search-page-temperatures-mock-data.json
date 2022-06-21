@@ -1,317 +1,317 @@
 [
     {
         "day": "monday",
-        "temperature": 25,
+        "degreesCelsius": 25,
         "locationCode": "amsterdam"
     },
     {
         "day": "tuesday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "amsterdam"
     },
     {
         "day": "wednesday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "amsterdam"
     },
     {
         "day": "thursday",
-        "temperature": 22,
+        "degreesCelsius": 22,
         "locationCode": "amsterdam"
     },
     {
         "day": "friday",
-        "temperature": 24,
+        "degreesCelsius": 24,
         "locationCode": "amsterdam"
     },
     {
         "day": "saturday",
-        "temperature": 24,
+        "degreesCelsius": 24,
         "locationCode": "amsterdam"
     },
     {
         "day": "sunday",
-        "temperature": 24,
+        "degreesCelsius": 24,
         "locationCode": "amsterdam"
     },
     {
         "day": "monday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "rotterdam"
     },
     {
         "day": "tuesday",
-        "temperature": 22,
+        "degreesCelsius": 22,
         "locationCode": "rotterdam"
     },
     {
         "day": "wednesday",
-        "temperature": 22,
+        "degreesCelsius": 22,
         "locationCode": "rotterdam"
     },
     {
         "day": "thursday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "rotterdam"
     },
     {
         "day": "friday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "rotterdam"
     },
     {
         "day": "saturday",
-        "temperature": 24,
+        "degreesCelsius": 24,
         "locationCode": "rotterdam"
     },
     {
         "day": "sunday",
-        "temperature": 21,
+        "degreesCelsius": 21,
         "locationCode": "rotterdam"
     },
     {
         "day": "monday",
-        "temperature": 22,
+        "degreesCelsius": 22,
         "locationCode": "the_hague"
     },
     {
         "day": "tuesday",
-        "temperature": 20,
+        "degreesCelsius": 20,
         "locationCode": "the_hague"
     },
     {
         "day": "wednesday",
-        "temperature": 19,
+        "degreesCelsius": 19,
         "locationCode": "the_hague"
     },
     {
         "day": "thursday",
-        "temperature": 19,
+        "degreesCelsius": 19,
         "locationCode": "the_hague"
     },
     {
         "day": "friday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "the_hague"
     },
     {
         "day": "saturday",
-        "temperature": 24,
+        "degreesCelsius": 24,
         "locationCode": "the_hague"
     },
     {
         "day": "sunday",
-        "temperature": 24,
+        "degreesCelsius": 24,
         "locationCode": "the_hague"
     },
     {
         "day": "monday",
-        "temperature": 18,
+        "degreesCelsius": 18,
         "locationCode": "oslo"
     },
     {
         "day": "tuesday",
-        "temperature": 17,
+        "degreesCelsius": 17,
         "locationCode": "oslo"
     },
     {
         "day": "wednesday",
-        "temperature": 20,
+        "degreesCelsius": 20,
         "locationCode": "oslo"
     },
     {
         "day": "thursday",
-        "temperature": 23,
+        "degreesCelsius": 23,
         "locationCode": "oslo"
     },
     {
         "day": "friday",
-        "temperature": 21,
+        "degreesCelsius": 21,
         "locationCode": "oslo"
     },
     {
         "day": "saturday",
-        "temperature": 19,
+        "degreesCelsius": 19,
         "locationCode": "oslo"
     },
     {
         "day": "sunday",
-        "temperature": 19,
+        "degreesCelsius": 19,
         "locationCode": "oslo"
     },
     {
         "day": "monday",
-        "temperature": 16,
+        "degreesCelsius": 16,
         "locationCode": "bergen"
     },
     {
         "day": "tuesday",
-        "temperature": 16,
+        "degreesCelsius": 16,
         "locationCode": "bergen"
     },
     {
         "day": "wednesday",
-        "temperature": 17,
+        "degreesCelsius": 17,
         "locationCode": "bergen"
     },
     {
         "day": "thursday",
-        "temperature": 19,
+        "degreesCelsius": 19,
         "locationCode": "bergen"
     },
     {
         "day": "friday",
-        "temperature": 19,
+        "degreesCelsius": 19,
         "locationCode": "bergen"
     },
     {
         "day": "saturday",
-        "temperature": 20,
+        "degreesCelsius": 20,
         "locationCode": "bergen"
     },
     {
         "day": "sunday",
-        "temperature": 21,
+        "degreesCelsius": 21,
         "locationCode": "bergen"
     },
     {
         "day": "monday",
-        "temperature": 17,
+        "degreesCelsius": 17,
         "locationCode": "stavanger"
     },
     {
         "day": "tuesday",
-        "temperature": 18,
+        "degreesCelsius": 18,
         "locationCode": "stavanger"
     },
     {
         "day": "wednesday",
-        "temperature": 16,
+        "degreesCelsius": 16,
         "locationCode": "stavanger"
     },
     {
         "day": "thursday",
-        "temperature": 16,
+        "degreesCelsius": 16,
         "locationCode": "stavanger"
     },
     {
         "day": "friday",
-        "temperature": 16,
+        "degreesCelsius": 16,
         "locationCode": "stavanger"
     },
     {
         "day": "saturday",
-        "temperature": 18,
+        "degreesCelsius": 18,
         "locationCode": "stavanger"
     },
     {
         "day": "sunday",
-        "temperature": 20,
+        "degreesCelsius": 20,
         "locationCode": "stavanger"
     },
     {
         "day": "monday",
-        "temperature": 32,
+        "degreesCelsius": 32,
         "locationCode": "madrid"
     },
     {
         "day": "tuesday",
-        "temperature": 30,
+        "degreesCelsius": 30,
         "locationCode": "madrid"
     },
     {
         "day": "wednesday",
-        "temperature": 31,
+        "degreesCelsius": 31,
         "locationCode": "madrid"
     },
     {
         "day": "thursday",
-        "temperature": 31,
+        "degreesCelsius": 31,
         "locationCode": "madrid"
     },
     {
         "day": "friday",
-        "temperature": 33,
+        "degreesCelsius": 33,
         "locationCode": "madrid"
     },
     {
         "day": "saturday",
-        "temperature": 34,
+        "degreesCelsius": 34,
         "locationCode": "madrid"
     },
     {
         "day": "sunday",
-        "temperature": 34,
+        "degreesCelsius": 34,
         "locationCode": "madrid"
     },
     {
         "day": "monday",
-        "temperature": 30,
+        "degreesCelsius": 30,
         "locationCode": "barcelona"
     },
     {
         "day": "tuesday",
-        "temperature": 30,
+        "degreesCelsius": 30,
         "locationCode": "barcelona"
     },
     {
         "day": "wednesday",
-        "temperature": 31,
+        "degreesCelsius": 31,
         "locationCode": "barcelona"
     },
     {
         "day": "thursday",
-        "temperature": 31,
+        "degreesCelsius": 31,
         "locationCode": "barcelona"
     },
     {
         "day": "friday",
-        "temperature": 30,
+        "degreesCelsius": 30,
         "locationCode": "barcelona"
     },
     {
         "day": "saturday",
-        "temperature": 29,
+        "degreesCelsius": 29,
         "locationCode": "barcelona"
     },
     {
         "day": "sunday",
-        "temperature": 31,
+        "degreesCelsius": 31,
         "locationCode": "barcelona"
     },
     {
         "day": "monday",
-        "temperature": 35,
+        "degreesCelsius": 35,
         "locationCode": "malaga"
     },
     {
         "day": "tuesday",
-        "temperature": 35,
+        "degreesCelsius": 35,
         "locationCode": "malaga"
     },
     {
         "day": "wednesday",
-        "temperature": 34,
+        "degreesCelsius": 34,
         "locationCode": "malaga"
     },
     {
         "day": "thursday",
-        "temperature": 33,
+        "degreesCelsius": 33,
         "locationCode": "malaga"
     },
     {
         "day": "friday",
-        "temperature": 33,
+        "degreesCelsius": 33,
         "locationCode": "malaga"
     },
     {
         "day": "saturday",
-        "temperature": 34,
+        "degreesCelsius": 34,
         "locationCode": "malaga"
     },
     {
         "day": "sunday",
-        "temperature": 34,
+        "degreesCelsius": 34,
         "locationCode": "malaga"
     }
 ]

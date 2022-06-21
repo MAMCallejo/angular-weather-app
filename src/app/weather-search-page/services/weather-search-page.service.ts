@@ -1,143 +1,168 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, debounceTime, delay, distinctUntilChanged, map, Observable } from 'rxjs';
-import { WeatherSearchLocationCountryModel, WeatherSearchLocationModel, WeatherSearchLocationTemperatureModel } from '../models';
+import { CountryModel, LocationModel, TemperatureModel } from '../models';
 import { FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherSearchPageService {
-  private weatherSearchLocationCountriesSubject: BehaviorSubject<WeatherSearchLocationCountryModel[] | undefined> = new BehaviorSubject<WeatherSearchLocationCountryModel[] | undefined>(undefined);
-  weatherSearchLocationCountries$ = this.weatherSearchLocationCountriesSubject.asObservable();
+  
+  // Private subjects (async sources of data for service use only):
+  private _countriesSubject: BehaviorSubject<CountryModel[] | undefined> = new BehaviorSubject<CountryModel[] | undefined>(undefined);
+  private _locationsSubject: BehaviorSubject<LocationModel[] | undefined> = new BehaviorSubject<LocationModel[] | undefined>(undefined);
+  private _filteredLocationsSubject: BehaviorSubject<LocationModel[] | undefined> = new BehaviorSubject<LocationModel[] | undefined>(undefined);
+  private _temperaturesSubject: BehaviorSubject<TemperatureModel[] | undefined> = new BehaviorSubject<TemperatureModel[] | undefined>(undefined);
+  private _toggleCountriesDropdownSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _toggleLocationsDropdownSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  
+  // Public observables (async sources of data used directly on the component DOM):
+  countries$ = this._countriesSubject.asObservable();
+  locations$ = this._locationsSubject.asObservable();
+  filteredLocations$ = this._filteredLocationsSubject.asObservable();
+  temperatures$ = this._temperaturesSubject.asObservable();
+  toggleCountriesDropdown$ = this._toggleCountriesDropdownSubject.asObservable();
+  toggleLocationsDropdown$ = this._toggleLocationsDropdownSubject.asObservable();
 
-  private weatherSearchLocationsSubject: BehaviorSubject<WeatherSearchLocationModel[] | undefined> = new BehaviorSubject<WeatherSearchLocationModel[] | undefined>(undefined);
-  weatherSearchLocations$ = this.weatherSearchLocationsSubject.asObservable();
+  // Private local variables (copies of observables data for service use only):
+  private _locations: LocationModel[] | undefined = undefined;
+  private _toggleStateCountriesDropdown: boolean = false;
+  private _toggleStateLocationsDropdown: boolean = false;
 
-  private weatherSearchLocations: WeatherSearchLocationModel[] | undefined = undefined;
-
-  private weatherSearchFilteredLocationsSubject: BehaviorSubject<WeatherSearchLocationModel[] | undefined> = new BehaviorSubject<WeatherSearchLocationModel[] | undefined>(undefined);
-  weatherSearchFilteredLocations$ = this.weatherSearchFilteredLocationsSubject.asObservable();
-
-  private weatherSearchLocationTemperaturesSubject: BehaviorSubject<WeatherSearchLocationTemperatureModel[] | undefined> = new BehaviorSubject<WeatherSearchLocationTemperatureModel[] | undefined>(undefined);
-  weatherSearchLocationTemperatures$ = this.weatherSearchLocationTemperaturesSubject.asObservable();
-
-  private toggleWeatherSearchLocationCountriesDropdownSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  toggleWeatherSearchLocationCountriesDropdown$ = this.toggleWeatherSearchLocationCountriesDropdownSubject.asObservable();
-
-  private toggleStateWeatherSearchLocationCountriesDropdown: boolean = false;
-
-  private toggleWeatherSearchLocationsDropdownSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  toggleWeatherSearchLocationsDropdown$ = this.toggleWeatherSearchLocationsDropdownSubject.asObservable();
-
-  private toggleStateWeatherSearchLocationsDropdown: boolean = false;
-
-  weatherSearchSelectedCountry: FormControl<WeatherSearchLocationCountryModel | null> = new FormControl<WeatherSearchLocationCountryModel | null>(null);
-  weatherSearchSelectedLocation: FormControl<WeatherSearchLocationModel | null> = new FormControl<WeatherSearchLocationModel | null>(null);
-  weatherSearchTerm: FormControl<string> = new FormControl<string>('', { nonNullable: true });
+  // Public user input controls (hold state of user input and triggers service logic):
+  selectedCountry: FormControl<CountryModel | null> = new FormControl<CountryModel | null>(null);
+  selectedLocation: FormControl<LocationModel | null> = new FormControl<LocationModel | null>(null);
+  searchTerm: FormControl<string> = new FormControl<string>('', { nonNullable: true });
 
   constructor(
     private httpClient: HttpClient
   ) {
-    this.weatherSearchLocations$.subscribe(locations => this.weatherSearchLocations = locations);
-    this.toggleWeatherSearchLocationCountriesDropdown$.subscribe(toggleState => this.toggleStateWeatherSearchLocationCountriesDropdown = toggleState);
-    this.toggleWeatherSearchLocationsDropdown$.subscribe(toggleState => this.toggleStateWeatherSearchLocationsDropdown = toggleState);
-    this.weatherSearchTerm.valueChanges.pipe(
+    // Subscribes to public observables to create local copies of the data.
+    this.locations$.subscribe(locations => this._locations = locations);
+    this.toggleCountriesDropdown$.subscribe(toggleState => this._toggleStateCountriesDropdown = toggleState);
+    this.toggleLocationsDropdown$.subscribe(toggleState => this._toggleStateLocationsDropdown = toggleState);
+
+    // Subscribes to changes in value of the user input controls and triggers service functions.
+    this.searchTerm.valueChanges.pipe(
       distinctUntilChanged(),
       debounceTime(200)
-    ).subscribe(searchTerm => { this.filterWeatherSearchLocations(searchTerm) });
-    this.weatherSearchSelectedCountry.valueChanges.pipe(
+    ).subscribe(searchTerm => { this._filterLocations(searchTerm) });
+    this.selectedCountry.valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(country => { if(country) this.refreshWeatherSearchLocations(country.code) });
-    this.weatherSearchSelectedLocation.valueChanges.subscribe(location => { 
-      if(location) this.refreshWeatherSearchLocationTemperatures(location.code);
-      this.weatherSearchTerm.setValue(location?.name ?? '');
+    this.selectedLocation.valueChanges.subscribe(location => { 
+      if(location) this.refreshTemperatures(location.code);
+      this.searchTerm.setValue(location?.name ?? '');
     });
   }
 
-  refreshWeatherSearchLocationCountries(): void {
-    this.resetWeatherSearch(true, true, true);
-    const weatherSearchLocationCountries$ = this.getWeatherSearchLocationCountriesMockData();
-    weatherSearchLocationCountries$.subscribe(weatherSearchLocationCountries => {
-      this.weatherSearchLocationCountriesSubject.next(weatherSearchLocationCountries);
-      if(weatherSearchLocationCountries && weatherSearchLocationCountries.length > 0) this.weatherSearchSelectedCountry.setValue(weatherSearchLocationCountries[0]);
+  /**
+   * Resets service.
+   * Fetches countries mock data and refreshes observable and selected country input control.
+   */
+  refreshCountries(): void {
+    this.resetCountries();
+    const countriesMockData$ = this._getCountriesMockData();
+    countriesMockData$.subscribe(countries => {
+      this._countriesSubject.next(countries);
+      if(countries && countries.length > 0) this.selectedCountry.setValue(countries[0]);
     })
   }
 
+  /**
+   * Toggles countries selection dropdown visibility.
+   */
+  toggleCountriesDropdown(): void {
+    this._toggleCountriesDropdownSubject.next(!this._toggleStateCountriesDropdown);
+  }
+
+  /**
+   * Toggles locations selection dropdown visibility.
+   */
+  toggleLocationsDropdown(): void {
+    this._toggleLocationsDropdownSubject.next(!this._toggleStateLocationsDropdown);
+  }
+
+  /*
+    Resets locations (and temperatures), fetches mock data according to the country code passed, and refreshes observable.
+    Sets filtered locations to default (show all).
+  */ 
   private refreshWeatherSearchLocations(countryCode: string): void {
-    this.resetWeatherSearch(false, true, true);
-    const weatherSearchLocations$ = this.getWeatherSearchLocationsMockData(countryCode);
+    this.resetLocations();
+    const weatherSearchLocations$ = this._getLocationsMockData(countryCode);
     weatherSearchLocations$.subscribe(weatherSearchLocations => {
-      this.weatherSearchLocationsSubject.next(weatherSearchLocations);
-      this.filterWeatherSearchLocations('');
+      this._locationsSubject.next(weatherSearchLocations);
+      this._filterLocations('');
     });
   }
 
-  private refreshWeatherSearchLocationTemperatures(locationCode: string): void {
-    this.resetWeatherSearch(false, false, true);
-    const weatherSearchLocationTemperatures$ = this.getWeatherSearchLocationTemperaturesMockData(locationCode);
-    weatherSearchLocationTemperatures$.subscribe(weatherSearchLocationTemperatures => {
-      this.weatherSearchLocationTemperaturesSubject.next(weatherSearchLocationTemperatures);
+  // Resets temperatures, fetches mock data according to the location code passed, and refreshes observable.
+  private refreshTemperatures(locationCode: string): void {
+    this._resetTemperatures();
+    const temperatures$ = this._getTemperaturesMockData(locationCode);
+    temperatures$.subscribe(temperatures => {
+      this._temperaturesSubject.next(temperatures);
     });
   }
 
-  private resetWeatherSearch(countries: boolean, locations: boolean, temperatures: boolean): void {
-    if(countries) {
-      this.weatherSearchLocationCountriesSubject.next(undefined);
-      this.weatherSearchSelectedCountry.setValue(null);
-    }
-    if(locations) {
-      this.weatherSearchLocationsSubject.next(undefined);
-      this.weatherSearchFilteredLocationsSubject.next(undefined);
-      this.weatherSearchSelectedLocation.setValue(null);
-      this.weatherSearchTerm.setValue('');
-    } 
-    if(temperatures) {
-      this.weatherSearchLocationTemperaturesSubject.next(undefined);
-    }
+  // Resets countries observable and user input control.
+  private resetCountries(): void {
+    this._countriesSubject.next(undefined);
+    this.selectedCountry.setValue(null);
+
+    this.resetLocations(); // Resets locations since selected country has been reset.
   }
 
-  private filterWeatherSearchLocations(searchTerm: string): void {
-    const filteredWeatherSearchLocations = this.weatherSearchLocations?.filter(location => location.name.toLowerCase().includes(searchTerm.toLowerCase())) ?? [];
-    this.weatherSearchFilteredLocationsSubject.next(filteredWeatherSearchLocations.length > 0 ? filteredWeatherSearchLocations : this.weatherSearchLocations);
+  // Resets locations observables and user input controls.
+  private resetLocations(): void {
+    this._locationsSubject.next(undefined);
+    this._filteredLocationsSubject.next(undefined);
+    this.selectedLocation.setValue(null);
+    this.searchTerm.setValue('');
+
+    this._resetTemperatures(); // Resets temperatures since selected location has been reset.
   }
 
-  toggleWeatherSearchLocationCountriesDropdown(): void {
-    this.toggleWeatherSearchLocationCountriesDropdownSubject.next(!this.toggleStateWeatherSearchLocationCountriesDropdown);
+  // Resets temperatures observable.
+  private _resetTemperatures(): void {
+    this._temperaturesSubject.next(undefined);
   }
 
-  toggleWeatherSearchLocationsDropdown(): void {
-    this.toggleWeatherSearchLocationsDropdownSubject.next(!this.toggleStateWeatherSearchLocationsDropdown);
+  // Filters locations based on search term inputted by the user.
+  private _filterLocations(searchTerm: string): void {
+    const filteredLocations = this._locations?.filter(location => location.name.toLowerCase().includes(searchTerm.toLowerCase())) ?? [];
+    this._filteredLocationsSubject.next(filteredLocations.length > 0 ? filteredLocations : this._locations);
   }
 
-  private getWeatherSearchLocationCountriesMockData(): Observable<WeatherSearchLocationCountryModel[] | undefined> {
-    return this.httpClient.get("assets/mock-data/weather-search-location-countries-mock-data.json").pipe(
+  // Fetches countries mock data. Simulates a response delay.
+  private _getCountriesMockData(): Observable<CountryModel[] | undefined> {
+    return this.httpClient.get("assets/mock-data/weather-search-page-countries-mock-data.json").pipe(
       delay(200),
-      map(response => {
-        const weatherSearchLocationCountriesMockData = response as WeatherSearchLocationCountryModel[];
-        return weatherSearchLocationCountriesMockData;
-      })
+      map(response => (response as CountryModel[]) ?? undefined)
     );
   }
 
-  private getWeatherSearchLocationsMockData(countryCode: string): Observable<WeatherSearchLocationModel[] | undefined> {
-    return this.httpClient.get("assets/mock-data/weather-search-locations-mock-data.json").pipe(
+  // Fetches locations mock data. Filters response based on country code passed. Simulates a response delay.
+  private _getLocationsMockData(countryCode: string): Observable<LocationModel[] | undefined> {
+    return this.httpClient.get("assets/mock-data/weather-search-page-locations-mock-data.json").pipe(
       delay(300),
       map(response => {
-        const weatherSearchLocationsMockData = response as WeatherSearchLocationModel[];
-        if (!weatherSearchLocationsMockData) return undefined;
-        return weatherSearchLocationsMockData.filter(weatherSearchLocationMockData => weatherSearchLocationMockData.countryCode === countryCode);
+        const locationsMockData = response as LocationModel[];
+        if (!locationsMockData) return undefined;
+        return locationsMockData.filter(location => location.countryCode === countryCode);
       })
     );
   }
 
-  private getWeatherSearchLocationTemperaturesMockData(locationCode: string): Observable<WeatherSearchLocationTemperatureModel[] | undefined> {
-    return this.httpClient.get("assets/mock-data/weather-search-location-temperatures-mock-data.json").pipe(
+  // Fetches temperatures mock data. Filters response based on location code passed. Simulates a response delay.
+  private _getTemperaturesMockData(locationCode: string): Observable<TemperatureModel[] | undefined> {
+    return this.httpClient.get("assets/mock-data/weather-search-page-temperatures-mock-data.json").pipe(
       delay(500),
       map(response => {
-        const weatherSearchLocationTemperaturesMockData = response as WeatherSearchLocationTemperatureModel[];
-        if (!weatherSearchLocationTemperaturesMockData) return undefined;
-        return weatherSearchLocationTemperaturesMockData.filter(weatherSearchLocationTemperatureMockData => weatherSearchLocationTemperatureMockData.locationCode === locationCode);
+        const temperaturesMockData = response as TemperatureModel[];
+        if (!temperaturesMockData) return undefined;
+        return temperaturesMockData.filter(temperature => temperature.locationCode === locationCode);
       })
     );
   }

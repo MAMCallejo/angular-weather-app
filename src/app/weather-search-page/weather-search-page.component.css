@@ -1,12 +1,9 @@
+/* Darkens magnifying glass icon from search bar */
 .search-input:focus+.search-icon img {
     opacity: 1;
 }
 
-.page {
-    -webkit-transition: background-image 0.2s ease-in-out;
-    transition: background-image 0.2s ease-in-out;
-}
-
+/* Animates loading spinner icon */
 .loading-spinner {
     -webkit-transition-property: -webkit-transform;
     -webkit-transition-duration: 1.2s;

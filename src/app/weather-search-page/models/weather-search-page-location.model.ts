@@ -1,4 +1,4 @@
-export interface WeatherSearchLocationModel {
+export interface LocationModel {
     code: string;
     name: string;
     countryCode: string;

@@ -1,4 +1,4 @@
-export enum WeatherSearchLocationDayEnum {
+export enum WeekDayEnum {
     Monday = "monday",
     Tuesday = "tuesday",
     Wednesday = "wednesday",

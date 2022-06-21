@@ -19,4 +19,4 @@ The app uses mock-data, so do not take it a source of truth for your next trip o
 
 ## Reflection
 
-Tailwind CSS together with Angular 14 make it easy to implement responsive, pixel-accurate web applications. The biggest challenges I encountered with this example application were figuring out how to make the most out of the Tailwind CSS classes and how to achieve full responsiveness across all device sizes. Thanks to these challenges I can now take with me the knowledge of a powerful new CSS framework that I will continue using over others like Boostrap.
+Tailwind CSS together with Angular 14 make it easy to implement responsive, pixel-accurate web applications. The biggest challenges I encountered with this example application were figuring out how to make the most out of the Tailwind CSS classes and how to achieve full responsiveness across all device sizes. Thanks to these challenges I can now take with me the knowledge of a powerful new CSS framework that I will continue using over others like Bootstrap.

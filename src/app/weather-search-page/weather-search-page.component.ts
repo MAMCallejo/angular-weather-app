@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherSearchPageService } from './services/weather-search-page.service';
-import { fadeInAnimation, fadeInOnEnterAnimation, fadeOutAnimation, fadeOutOnLeaveAnimation } from 'angular-animations';
+import { fadeInOnEnterAnimation } from 'angular-animations';
 
 @Component({
   selector: 'app-weather-search-page',

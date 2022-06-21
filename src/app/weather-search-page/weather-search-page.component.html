@@ -1,82 +1,66 @@
 <div class="flex flex-col space-y-2 h-full items-center justify-center p-5 bg-gradient-to-br from-sky-300/70 to-yellow-200/70">
-    <div class="flex w-full max-w-2xl space-x-2 h-20 p-5 bg-white rounded-xl shadow-lg">
+    <div class="h-14 w-14 p-3 mb-3 bg-white rounded-xl shadow-lg self-start 2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden xs:hidden block">
         <img src="../../assets/icons/search-box-icon.png" alt="weather search icon">
-        <button class="flex min-w-fit items-center p-3 rounded-md border border-neutral-200 hover:border-blue-200 focus:outline-none focus:outline-blue-200 focus:outline-offset-0 focus:border-blue-200">
-            <img class="h-4 rounded-md object-cover mr-2 mt-0.5" src="../../assets/icons/nl-flag.png" alt="nl flag">
-            <span class="font-bold text-xs mr-1.5">NL</span>
-            <img class="w-3.5 h-3.5 opacity-50" src="../../assets/icons/dropdown-icon.png" alt="dropdown icon">
-        </button>
-        <div class="flex-grow relative group">
-            <input class="pl-3 pr-8 h-full w-full text-sm border rounded-md hover:border-blue-200 focus:outline-none focus:outline-blue-200 focus:outline-offset-0 focus:border-blue-200 search-input" placeholder="Please enter your location..." type="text">
-            <div class="flex absolute inset-y-0 right-2 items-center pointer-events-none search-icon">
-                <img class="w-5 h-5 opacity-50" src="../../assets/icons/search-icon.png" alt="search icon">
-            </div>
-        </div>
     </div>
-    <div class="flex flex-col items-center w-full max-w-2xl p-5">
-        <span class="font-bold text-sm text-sky-900 mb-3">JUNE 20 - 26 2022</span>
-        <div class="flex mb-10">
-            <span class="font-bold text-8xl text-white">10</span>
-            <span class="font-bold text-4xl text-white pt-2">°</span>
-            <span class="font-bold text-4xl text-white pt-2">C</span>
-        </div>
-        <div class="flex space-x-8">
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">MONDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">8</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
+    <div class="flex w-full max-w-2xl h-20 p-5 bg-white rounded-xl shadow-lg">
+        <img class="2xl:block xl:block lg:block md:block sm:block xs:block hidden mr-2" src="../../assets/icons/search-box-icon.png" alt="weather search icon">
+        <ng-container *ngIf="weatherSearchPageService.weatherSearchLocationCountries$ | async as locationCountries; else loadingCountries">
+            <button [@fadeIn]="{ value: '', params: { duration : 500 } }" class="mr-2 transition-opacity flex justify-between w-24 items-center p-3 rounded-md border border-neutral-200 hover:border-blue-200 focus:outline-none focus:outline-blue-200 focus:outline-offset-0 focus:border-blue-200">
+                <img class="h-4 rounded-md object-cover mt-0.5" src="../../assets/icons/nl-flag.png" alt="nl flag">
+                <span class="font-bold text-xs">NL</span>
+                <img class="w-3.5 h-3.5 opacity-50" src="../../assets/icons/dropdown-icon.png" alt="dropdown icon">
+            </button>
+            <!-- TO-DO: ADD COUNTRY LIST -->
+        </ng-container>
+        <ng-template #loadingCountries>
+            <button disabled class="w-24 bg-neutral-50 flex justify-between items-center p-3 rounded-md border border-neutral-200 hover:border-blue-200 focus:outline-none focus:outline-blue-200 focus:outline-offset-0 focus:border-blue-200">
+                <div class="w-4 h-4 border-2 border-transparent border-y-neutral-500 border-l-neutral-500 rounded-full transition-transform loading-spinner"></div>
+                <img class="w-3.5 h-3.5 opacity-50" src="../../assets/icons/dropdown-icon.png" alt="dropdown icon">
+            </button>
+        </ng-template>
+        <ng-container *ngIf="weatherSearchPageService.weatherSearchLocations$ | async as locations; else loadingLocations">
+            <div [@fadeIn]="{ value: '', params: { duration : 500 } }" class="transition-opacity flex-grow relative">
+                <input class="pl-3 pr-8 h-full w-full text-sm border rounded-md hover:border-blue-200 focus:outline-none focus:outline-blue-200 focus:outline-offset-0 focus:border-blue-200 search-input" placeholder="Please enter your location..." type="text">
+                <div class="flex absolute inset-y-0 right-2 items-center pointer-events-none search-icon">
+                    <img class="w-5 h-5 opacity-50" src="../../assets/icons/search-icon.png" alt="search icon">
                 </div>
             </div>
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">TUESDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">8</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
+        </ng-container>
+        <ng-template #loadingLocations>
+            <div class="flex-grow relative">
+                <input class="pl-3 pr-8 h-full w-full text-sm bg-neutral-50 border rounded-md"  disabled type="text">
+                <div class="flex absolute inset-y-0 right-0.5 items-center pointer-events-none search-icon">
+                    <div class="w-4 h-4 border-2 border-transparent border-y-neutral-500 border-l-neutral-500 rounded-full transition-transform loading-spinner mr-2"></div>
                 </div>
             </div>
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">WEDNESDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">8</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
-                </div>
-            </div>
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">THURSDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">12</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
-                </div>
-            </div>
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">FRIDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">10</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
-                </div>
-            </div>
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">SATURDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">10</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
-                </div>
-            </div>
-            <div class="flex flex-col items-center">
-                <span class="font-bold text-sm text-sky-900">SUNDAY</span>
-                <div class="flex">
-                    <span class="font-bold text-xl text-white">10</span>
-                    <span class="font-bold text-md text-white">°</span>
-                    <span class="font-bold text-sm text-white pt-0.5">C</span>
-                </div>
-            </div>
-        </div>
+        </ng-template>
     </div>
+    <ng-container *ngIf="weatherSearchPageService.weatherSearchLocationTemperatures$ | async as locationTemperatures; else loadingTemperatures">
+        <div [@fadeIn]="{ value: '', params: { duration : 500 } }" class="flex flex-col items-center w-full max-w-3xl p-5">
+            <span class="font-bold text-xs text-sky-900 mb-4">JUNE 20 - 26 2022</span>
+            <div class="flex mb-12">
+                <span class="font-bold text-8xl text-white">10</span>
+                <span class="font-bold text-4xl text-white pt-2">°</span>
+                <span class="font-bold text-4xl text-white pt-2">C</span>
+            </div>
+            <div class="flex flex-wrap justify-center">
+                <div *ngFor="let locationTemperature of locationTemperatures;"
+                    class="flex flex-col items-center 2xl:w-auto 2xl:mx-5 2xl:mb-0 xl:w-auto xl:mx-5 xl:mb-0 lg:w-auto lg:mx-5 lg:mb-0 md:w-auto md:mx-5 md:mb-0 sm:w-1/4 sm:mx-5 sm:mb-5 xs:w-1/4 xs:mx-5 xs:mb-5 w-1/4 mx-5 mb-5">
+                    <span class="font-bold text-xs text-sky-900">{{ locationTemperature.day | uppercase }}</span>
+                    <div class="flex">
+                        <span class="font-bold text-xl text-white">{{ locationTemperature.temperature }}</span>
+                        <span class="font-bold text-md text-white">°</span>
+                        <span class="font-bold text-sm text-white pt-0.5">C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #loadingTemperatures>
+        <div class="flex flex-col items-center w-full max-w-2xl py-5">
+            <div class="h-5 w-28 animate-pulse bg-sky-900/50 rounded-md mb-4"></div>
+            <div class="h-20 w-28 animate-pulse bg-white/50 rounded-md mb-14"></div>
+            <div class="w-full h-14 animate-pulse bg-sky-900/50 rounded-md"></div>
+        </div>
+    </ng-template>
 </div>

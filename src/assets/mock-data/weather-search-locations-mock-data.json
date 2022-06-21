@@ -1,0 +1,47 @@
+[
+    {
+        "code": "amsterdam",
+        "name": "Amsterdam",
+        "countryCode": "NL"
+    },
+    {
+        "code": "rotterdam",
+        "name": "Rotterdam",
+        "countryCode": "NL"
+    },
+    {
+        "code": "the_hague",
+        "name": "The Hague",
+        "countryCode": "NL"
+    },
+    {
+        "code": "oslo",
+        "name": "Oslo",
+        "countryCode": "NO"
+    },
+    {
+        "code": "bergen",
+        "name": "Bergen",
+        "countryCode": "NO"
+    },
+    {
+        "code": "stavanger",
+        "name": "Stavanger",
+        "countryCode": "NO"
+    },
+    {
+        "code": "madrid",
+        "name": "Madrid",
+        "countryCode": "ES"
+    },
+    {
+        "code": "barcelona",
+        "name": "Barcelona",
+        "countryCode": "ES"
+    },
+    {
+        "code": "malaga",
+        "name": "Malaga",
+        "countryCode": "ES"
+    }
+]

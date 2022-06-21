@@ -1,0 +1,17 @@
+[
+    {
+        "name": "The Netherlands",
+        "code": "NL",
+        "iconFileName": "nl-flag.png"
+    },
+    {
+        "name": "Norway",
+        "code": "NO",
+        "iconFileName": "no-flag.png"
+    },
+    {
+        "name": "Spain",
+        "code": "ES",
+        "iconFileName": "es-flag.png"
+    }
+]
